@@ -15,6 +15,16 @@
       "executablePath": "dotnet",
       "commandLineArgs": "\"$(VINTAGE_STORY)/VintagestoryServer.dll\" --tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\"",
       "workingDirectory": "$(VINTAGE_STORY)"
+    },
+    "Client No World": {
+      "commandName": "Executable",
+      "executablePath": "$(VINTAGE_STORY)/Vintagestory.exe",
+      "commandLineArgs": "--tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\"",
+      "workingDirectory": "$(VINTAGE_STORY)",
+      "environmentVariables": {
+        "TEXTURE_DEBUG_DISPOSE": "true"
+      },
+      "nativeDebugging": false
     }
   }
 }

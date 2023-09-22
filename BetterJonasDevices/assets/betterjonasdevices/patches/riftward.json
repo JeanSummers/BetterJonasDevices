@@ -9,6 +9,12 @@
     "file": "game:blocktypes/machine/riftward",
     "op": "replace",
     "path": "/class",
+    "value": "BlockBetterRiftWard"
+  },
+  {
+    "file": "game:blocktypes/machine/riftward",
+    "op": "replace",
+    "path": "/entityClass",
     "value": "BetterRiftWard"
   }
 ]

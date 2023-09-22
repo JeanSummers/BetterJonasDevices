@@ -26,9 +26,30 @@ This mod overrides base game code using Harmony.
 It's recommended to create a backup when adding this mod to an untested version of the game.
 
 Tested on versions:  
-1.18.8 - 1.18.12
+1.18.8 - 1.18.13
 
 ## Config
 
-Config is not implemented in 1.0.0 version of the mod.
-Contact me in the comments or on Discord if you using this mod and really want to tweak some of the functionality.
+Config is located under `VintageStoryData/ModConfig/betterjonasdevices.json`
+
+To disable area effects just set range value to 0
+
+Supression is vanilla mechanic when rift just becomes small and harmless in range of device
+Destruction is mod mechanic which actively removes rifts in range.
+Restoration fully replenishes temporal stability for players in range every 5 seconds.
+
+Default values:
+
+```json
+{
+  "NightVision": {
+    "OverlayEnabled": true,
+    "HiglightRange": 64
+  },
+  "RiftWard": {
+    "SupressionRange": 128,
+    "DestructionRange": 64,
+    "RestorationRange": 64
+  }
+}
+```

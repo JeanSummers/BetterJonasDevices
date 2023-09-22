@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using Vintagestory.GameContent;
 
 
-namespace BetterJonasDevices
+namespace BetterJonasDevices;
+
+[HarmonyPatch(typeof(BlockEntityRiftWard), methodName: "BlockEntityRiftWard_OnRiftSpawned")]
+internal class ImproveRangePatch
 {
-    [HarmonyPatch(typeof(BlockEntityRiftWard), methodName: "BlockEntityRiftWard_OnRiftSpawned")]
-    internal class ImproveRangePatch
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        foreach (var instruction in instructions)
         {
-            foreach (var instruction in instructions)
+            if (instruction.operand?.Equals(0.95) == true)
             {
-                if (instruction.operand?.Equals(0.95) == true)
-                {
-                    instruction.operand = 1.0;
-                }
-                if (instruction.operand?.Equals(30f) == true)
-                {
-                    instruction.operand = 128f;
-                }
-                yield return instruction;
+                instruction.operand = 1.0;
             }
+            if (instruction.operand?.Equals(30f) == true && Config.RiftWard.SupressionRange > 0)
+            {
+                instruction.operand = (float)Config.RiftWard.SupressionRange;
+            }
+            yield return instruction;
         }
     }
 }
