@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using HarmonyLib;
+using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
 namespace BetterJonasDevices;
 
@@ -49,12 +52,13 @@ internal class BetterRiftWardBlock : Block
     public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1)
     {
         var be = GetBlockEntity<BetterRiftWardEntity>(pos);
-        return new ItemStack[] { new(Id, EnumItemClass.Block, 1, be.GetItemData(), world) };
+        var data = be == null ? TryGetNonBetter(pos) : be.GetItemData();
+
+        return new ItemStack[] { new(Id, EnumItemClass.Block, 1, data, world) };
     }
 
     public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)
     {
-        var be = GetBlockEntity<BetterRiftWardEntity>(blockSel);
 
         ItemSlot activeSlot = byPlayer.InventoryManager.ActiveHotbarSlot;
         if (byPlayer.Entity.Controls.ShiftKey && activeSlot.Empty)
@@ -69,6 +73,7 @@ internal class BetterRiftWardBlock : Block
             return true;
         }
 
+        var be = GetBlockEntity<BetterRiftWardEntity>(blockSel);
         if (be != null && be.OnInteract(blockSel, byPlayer))
         {
             return true;
@@ -80,5 +85,21 @@ internal class BetterRiftWardBlock : Block
     public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
     {
         return interactions.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
+    }
+
+    /// <summary>
+    /// In case when player tries to pick up riftward which was placed before enabling the mod
+    /// </summary>
+    private TreeAttribute TryGetNonBetter(BlockPos pos)
+    {
+        var be = GetBlockEntity<BlockEntityRiftWard>(pos);
+        if (be == null) return null;
+
+        var fuelDays = Traverse.Create(be).Field("fuelDays").GetValue() as double?;
+
+        TreeAttribute tree = new();
+        tree.SetDouble("fuelUntilTotalDays", fuelDays ?? 0);
+        tree.SetBool("on", be.On);
+        return tree;
     }
 }

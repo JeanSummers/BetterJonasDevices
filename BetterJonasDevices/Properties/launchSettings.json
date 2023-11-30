@@ -5,9 +5,6 @@
       "executablePath": "$(VINTAGE_STORY)/Vintagestory.exe",
       "commandLineArgs": "--tracelog --addModPath \"$(ProjectDir)/bin/$(Configuration)/Mods\" -o Test",
       "workingDirectory": "$(VINTAGE_STORY)",
-      "environmentVariables": {
-        "TEXTURE_DEBUG_DISPOSE": "true"
-      },
       "nativeDebugging": false
     },
     "Server": {
